@@ -1,0 +1,15 @@
+{%- import 'docker-services/prometheus.j2' as prometheus with context %}
+{%- set hosts = ["cam-briefkasten", "cam-garten", "cam-hof", "ems-esp-heizung", "openccu", "zigbeegateway"] %}
+{%- set targets = [] %}
+{%- for host in hosts %}
+{%- set _ = targets.append({"address": vars_group_homelab_nodes__config.hosts[host], "source_host": host}) %}
+{%- endfor %}
+scrape_interval: 1m
+metrics_path: /probe
+params:
+  module: [icmp]
+static_configs:
+{{ prometheus.target_static_configs(targets) }}
+relabel_configs:
+{{ prometheus.blackbox_probe_relabel_configs(vars_host_homelab_nodes_projects__params.main.exporters_resolved.blackbox.address) }}
+{{ prometheus.instance_relabel_config() }}

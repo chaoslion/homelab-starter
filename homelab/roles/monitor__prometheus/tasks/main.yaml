@@ -1,0 +1,3 @@
+- name: Create Prometheus Rules And Scrapes
+  tags: [bump]
+  ansible.builtin.include_tasks: docker-services/prometheus-deploy-config.yaml

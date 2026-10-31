@@ -1,0 +1,4 @@
+# alpine
+# ansible_become_method: doas
+# debian
+ansible_become_method: sudo

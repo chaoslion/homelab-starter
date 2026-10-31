@@ -1,0 +1,2 @@
+dependencies:
+    - homelab.nodes.infra_alertmanager_service

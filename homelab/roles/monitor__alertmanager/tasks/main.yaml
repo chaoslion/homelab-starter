@@ -1,0 +1,3 @@
+- name: Deploy Inhibit Rules
+  tags: [bump]
+  ansible.builtin.include_tasks: docker-services/alertmanager-deploy-inhibit.yaml

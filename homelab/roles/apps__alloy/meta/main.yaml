@@ -1,0 +1,2 @@
+dependencies:
+  - homelab.nodes.infra_alloy_service

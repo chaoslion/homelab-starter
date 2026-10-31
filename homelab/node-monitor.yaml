@@ -1,0 +1,43 @@
+supervisor:
+    index: 10
+    name: pve
+    memory: 2048
+    group: mid
+projects:
+    alloy:
+        service:
+            params:
+                loki: node-monitor:loki::http
+            expose:
+                http: {}
+    alertmanager:
+        service:
+            tag: v0.34.0
+            params:
+                notifiers:
+                    - type: ntfy
+                      token: SANITIZED_NTFY_TOKEN
+                      topic: homelab-alerts
+                      url: https://ntfy.example.com
+                    - type: pushover
+                      user: SANITIZED_PUSHOVER_USER
+                      severities:
+                          critical: SANITIZED_PUSHOVER_CRITICAL
+                          warning: SANITIZED_PUSHOVER_WARNING
+                          info: SANITIZED_PUSHOVER_INFO
+                url: https://alertmanager.home.example.com
+            expose:
+                http: {}
+    prometheus:
+        service:
+            tag: "v3.14.0"
+            params:
+                alertmanagers:
+                    - node-monitor:alertmanager::http
+                retention: 72h
+                url: https://prometheus.home.example.com
+            expose:
+                http: {}
+        dependencies:
+            prometheus_blackbox:
+                params: {}

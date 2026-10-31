@@ -1,0 +1,15 @@
+dependencies:
+    - role: homelab.nodes.infra_prometheus_service
+      vars:
+          # Example scrape configs - using fake/example targets
+          infra_prometheus_service_watch_custom:
+              - service/node_exporter
+              - probe/icmp
+              - probe/https
+    - role: homelab.nodes.infra_prometheus_exporter_blackbox_service
+      vars:
+          infra_prometheus_exporter_blackbox_service_name: prometheus_blackbox
+          # Example DNS target (using a public DNS server)
+          infra_prometheus_exporter_blackbox_service_include_dns:
+              - name: example
+                target: example.com

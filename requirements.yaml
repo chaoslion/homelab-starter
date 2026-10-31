@@ -1,0 +1,7 @@
+collections:
+    - name: chaoslion.ansible_homelab_debian
+      source: ssh://git@codeberg.org/chaoslion/ansible-homelab-debian.git
+      type: git
+    - name: chaoslion.ansible_homelab_nodes
+      source: ssh://git@codeberg.org/chaoslion/ansible-homelab-nodes.git
+      type: git

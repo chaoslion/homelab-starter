@@ -1,0 +1,8 @@
+{%- import 'docker-services/prometheus.j2' as prometheus with context %}
+{%- set targets = vars_host_homelab_nodes_projects__params.main.targets_node_exporters_resolved + vars_host_homelab_nodes_projects__params.main.targets_nodes_node_exporters_resolved %}
+{%- if targets | length > 0 %}
+static_configs:
+{{ prometheus.target_static_configs(targets) }}
+relabel_configs:
+{{ prometheus.instance_relabel_config() }}
+{%- endif %}

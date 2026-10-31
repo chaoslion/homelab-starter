@@ -1,0 +1,55 @@
+interval: 1m
+rules:
+  - alert: HomelabNodesProjectContainerDown
+    expr: homelab_nodes_project_container_running == 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: "Container is not running."
+      summary: "{{ $labels.instance }}: {{ $labels.project }}/{{ $labels.name }}"
+
+  - alert: HomelabNodesProjectContainerDownPersistent
+    expr: homelab_nodes_project_container_running == 0
+    for: 6h
+    labels:
+      severity: critical
+    annotations:
+      description: "Container has been down for an extended period."
+      summary: "{{ $labels.instance }}: {{ $labels.project }}/{{ $labels.name }} down 6h+"
+
+  - alert: HomelabNodesProjectStatusError
+    expr: homelab_nodes_project_status == 3
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      description: "Docker Compose project is reporting an error status."
+      summary: "{{ $labels.instance }}: {{ $labels.project }}"
+
+  - alert: HomelabNodesProjectContainerHighCpu
+    expr: homelab_nodes_project_container_cpu_percent > 90
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      description: "Container CPU usage is sustained high, which may cause slow response times."
+      summary: '{{ $labels.instance }}: {{ $labels.project }}/{{ $labels.name }} {{ $value | printf "%.0f" }}%'
+
+  - alert: HomelabNodesProjectContainerHighMemory
+    expr: homelab_nodes_project_container_memory_percent > 90
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      description: "Container memory usage is sustained high, risking OOM termination."
+      summary: '{{ $labels.instance }}: {{ $labels.project }}/{{ $labels.name }} {{ $value | printf "%.0f" }}%'
+
+  - alert: HomelabNodesProjectContainerHighMemoryPersistent
+    expr: homelab_nodes_project_container_memory_percent > 90
+    for: 1h
+    labels:
+      severity: critical
+    annotations:
+      description: "Container memory usage has been critically high for an extended period, risking OOM termination."
+      summary: '{{ $labels.instance }}: {{ $labels.project }}/{{ $labels.name }} {{ $value | printf "%.0f" }}% for 1h+'
