@@ -1,0 +1,62 @@
+auth_enabled: false
+
+server:
+  http_listen_port: {{ vars_host_homelab_nodes_projects__specs.main.network.http.port }}
+  log_level: error
+
+common:
+  path_prefix: /loki
+  replication_factor: 1
+  storage:
+    filesystem:
+      chunks_directory: "{{ vars_host_homelab_nodes_projects__workspaces.main.data.target }}/chunks"
+      rules_directory: "{{ vars_host_homelab_nodes_projects__workspaces.main.rules.target }}"
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+
+compactor:
+  retention_enabled: true
+  delete_request_store: filesystem
+
+limits_config:
+  discover_service_name: [job]
+  retention_period: "{{ vars_host_homelab_nodes_projects__params.main.retention }}"
+  max_query_lookback: "{{ vars_host_homelab_nodes_projects__params.main.retention }}"
+  discover_log_levels: true
+  log_level_fields: [journal_priority]
+
+# for grafana
+pattern_ingester:
+  enabled: true
+
+query_range:
+  results_cache:
+    cache:
+      embedded_cache:
+        enabled: true
+        max_size_mb: 100
+
+schema_config:
+  configs:
+    - from: 2024-01-01
+      store: tsdb
+      object_store: filesystem
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+ruler:
+  wal:
+    dir: "{{ vars_host_homelab_nodes_projects__workspaces.main.data.target }}/ruler-wal"
+  alertmanager_url: "http://{{ vars_host_homelab_nodes_projects__params.main.alertmanager_resolved.address }}"
+  remote_write:
+    enabled: true
+    clients:
+      default:
+        url: "http://{{ vars_host_homelab_nodes_projects__params.main.prometheus_resolved.address }}/api/v1/write"
+
+analytics:
+  reporting_enabled: false

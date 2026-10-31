@@ -1,79 +1,79 @@
-plugin homelab.nodes.inventory
+plugin: homelab.nodes.inventory
 config:
-  content: homelab
-  domain: home.example.com
-  ip_range:
-    - 192.168.178.*
-  database:
-    name: homelab
-    user: "<SECRET>"
-    password: "<SECRET>"
-  admin:
-    mail: admin@example.com
-    name: Admin
-    password: "<SECRET>"
-    password_hash: "<SECRET_HASH>"
-  timezone: Europe/Berlin
-  mail:
-    password: "<SECRET>"
-    port: 587
-    sender: homelab@example.com
-    server: smtp.mail.example.com
-    user: "<SECRET>"
-  registry:
-    address: 192.168.178.25
-    port: 5000
-  supervisors:
-    offset: 100
-    image:
-      url: https://cloud.debian.org/images/cloud/trixie/20250814-2204/debian-13-generic-amd64-20250814-2204.qcow2
-      url_sha: https://cloud.debian.org/images/cloud/trixie/20250814-2204/SHA512SUMS
-      path: /root/homelab-debian.qcow2
+    content: homelab
+    domain: home.example.com
+    ip_range:
+        - 192.168.178.*
+    database:
+        name: homelab
+        user: "<SECRET>"
+        password: "<SECRET>"
+    admin:
+        mail: admin@example.com
+        name: Admin
+        password: "<SECRET>"
+        password_hash: "<SECRET_HASH>"
+    timezone: Europe/Berlin
+    mail:
+        password: "<SECRET>"
+        port: 587
+        sender: homelab@example.com
+        server: smtp.mail.example.com
+        user: "<SECRET>"
+    registry:
+        address: 192.168.178.25
+        port: 5000
+    supervisors:
+        offset: 100
+        image:
+            url: https://cloud.debian.org/images/cloud/trixie/20250814-2204/debian-13-generic-amd64-20250814-2204.qcow2
+            url_sha: https://cloud.debian.org/images/cloud/trixie/20250814-2204/SHA512SUMS
+            path: /root/homelab-debian.qcow2
+        hosts:
+            pve:
+                host: 192.168.178.12
+                gateway: 192.168.178.1
+                config:
+                    cpu: host
+                    net0: virtio,bridge=vmbr0
+                    onboot: true
+                    startup: order=1000,up=60
     hosts:
-      pve:
-        host: 192.168.178.12
-        gateway: 192.168.178.1
-        config:
-          cpu: host
-          net0: virtio,bridge=vmbr0
-          onboot: true
-          startup: order=1000,up=60
-  hosts:
-    node-monitor: 192.168.178.23
-    router: 192.168.178.1
-  websites:
-    default_homepage_group: Monitor
-    sites:
-      - id: alertmanager
-        domains: [alertmanager.home.example.com]
-        proxy:
-          service:
-            servers:
-              main: [node-monitor:alertmanager::http]
-        homepage:
-          group: Monitor
-          help: Alarmverwaltung.
-          icon: alertmanager
-          title: Alertmanager
-      - id: prometheus
-        domains: [prometheus.home.example.com]
-        proxy:
-          service:
-            servers:
-              main: [node-monitor:prometheus::http]
-        homepage:
-          group: Monitor
-          help: Metriken-Datenbank.
-          icon: prometheus
-          title: Prometheus
-      - id: router
-        domains: [router.home.example.com]
-        proxy:
-          service:
-            scheme: http+nohttp2
-            servers:
-              main: [gateway:80]
-        homepage:
-          help: Router-Verwaltungsoberfläche.
-          icon: avm-fritzbox
-          title: FRITZ!Box
+        node-monitor: 192.168.178.23
+        router: 192.168.178.1
+    websites:
+        default_homepage_group: Monitor
+        sites:
+            - id: alertmanager
+              domains: [alertmanager.home.example.com]
+              proxy:
+                  service:
+                      servers:
+                          main: [node-monitor:alertmanager::http]
+              homepage:
+                  group: Monitor
+                  help: Alarmverwaltung.
+                  icon: alertmanager
+                  title: Alertmanager
+            - id: prometheus
+              domains: [prometheus.home.example.com]
+              proxy:
+                  service:
+                      servers:
+                          main: [node-monitor:prometheus::http]
+              homepage:
+                  group: Monitor
+                  help: Metriken-Datenbank.
+                  icon: prometheus
+                  title: Prometheus
+            - id: router
+              domains: [router.home.example.com]
+              proxy:
+                  service:
+                      scheme: http+nohttp2
+                      servers:
+                          main: [router:80]
+              homepage:
+                  help: Router-Verwaltungsoberfläche.
+                  icon: avm-fritzbox
+                  title: FRITZ!Box

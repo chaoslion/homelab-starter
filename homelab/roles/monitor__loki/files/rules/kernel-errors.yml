@@ -1,0 +1,28 @@
+interval: 1m
+rules:
+  - alert: KernelError
+    expr: >-
+      sum by (instance) (count_over_time({job="loki.source.journal.kernel", journal_priority=~"emerg|alert|crit|err"} [5m])) > 0
+    labels:
+      severity: warning
+    annotations:
+      description: "Kernel is logging errors at emerg/alert/crit/err priority."
+      summary: "{{ $labels.instance }}: {{ $value | printf \"%.0f\" }} errors/5m"
+
+  - alert: KernelOOMKill
+    expr: >-
+      sum by (instance) (count_over_time({job="loki.source.journal.kernel"} |~ `(?i)(out of memory|invoked oom-killer)` [5m])) > 0
+    labels:
+      severity: critical
+    annotations:
+      description: "The out-of-memory killer is terminating processes due to memory pressure."
+      summary: "{{ $labels.instance }}: {{ $value | printf \"%.0f\" }}x/5m"
+
+  - alert: KernelDiskError
+    expr: >-
+      sum by (instance) (count_over_time({job="loki.source.journal.kernel"} |~ `(?i)(i/o error|ext4-fs error|buffer i/o error|ata[0-9.]* error)` [5m])) > 0
+    labels:
+      severity: critical
+    annotations:
+      description: "Kernel is reporting disk or filesystem I/O errors, which may indicate failing storage hardware."
+      summary: "{{ $labels.instance }}: {{ $value | printf \"%.0f\" }} errors/5m"

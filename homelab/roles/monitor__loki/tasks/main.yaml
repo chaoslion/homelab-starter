@@ -1,0 +1,41 @@
+- name: Populate Data Directory
+  become: true
+  loop:
+      - chunks
+  ansible.builtin.file:
+      state: directory
+      dest: "{{ vars_host_homelab_nodes_projects__workspaces.main.data.source }}/{{ item | basename }}"
+      mode: "0755"
+      owner: "{{ vars_host_homelab_nodes_projects__workspaces_owners.main.owner }}"
+      group: "{{ vars_host_homelab_nodes_projects__workspaces_owners.main.group }}"
+
+- name: Populate Rules Directory
+  become: true
+  loop:
+      - fake
+      - ruler-wal
+  ansible.builtin.file:
+      state: directory
+      dest: "{{ vars_host_homelab_nodes_projects__workspaces.main.rules.source }}/{{ item }}"
+      mode: "0755"
+      owner: "{{ vars_host_homelab_nodes_projects__workspaces_owners.main.owner }}"
+      group: "{{ vars_host_homelab_nodes_projects__workspaces_owners.main.group }}"
+
+- name: Create Loki Configuration
+  become: true
+  ansible.builtin.template:
+      src: config.yaml.j2
+      dest: "{{ vars_host_homelab_nodes_projects__workspaces.main.config.source }}/local-config.yaml"
+      mode: "0644"
+      owner: "{{ vars_host_homelab_nodes_projects__workspaces_owners.main.owner }}"
+      group: "{{ vars_host_homelab_nodes_projects__workspaces_owners.main.group }}"
+
+- name: Create Loki Rules
+  tags: [bump]
+  become: true
+  ansible.builtin.template:
+      src: rules.yml.j2
+      dest: "{{ vars_host_homelab_nodes_projects__workspaces.main.rules.source }}/fake/rules.yml"
+      mode: "0644"
+      owner: "{{ vars_host_homelab_nodes_projects__workspaces_owners.main.owner }}"
+      group: "{{ vars_host_homelab_nodes_projects__workspaces_owners.main.group }}"

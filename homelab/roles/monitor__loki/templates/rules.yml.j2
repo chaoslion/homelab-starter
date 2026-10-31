@@ -1,0 +1,3 @@
+# uses prometheus rules layout
+{% import 'docker-services/prometheus.j2' as prometheus with context %}
+{{- prometheus.rules() }}

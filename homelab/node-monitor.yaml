@@ -10,6 +10,14 @@ projects:
                 loki: node-monitor:loki::http
             expose:
                 http: {}
+    loki:
+        service:
+            params:
+                retention: 72h
+                prometheus: node-monitor:prometheus::http
+                alertmanager: node-monitor:alertmanager::http
+            expose:
+                http: {}
     alertmanager:
         service:
             tag: v0.34.0

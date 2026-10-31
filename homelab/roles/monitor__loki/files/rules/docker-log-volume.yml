@@ -1,0 +1,13 @@
+interval: 1m
+rules:
+  - alert: ContainerLogVolumeSpike
+    expr: >-
+      sum by (instance, homelab_nodes_project, homelab_nodes_service) (count_over_time({job="loki.source.journal.docker"} [5m])) > 5 * sum by (instance, homelab_nodes_project, homelab_nodes_service) (count_over_time({job="loki.source.journal.docker"} [6h] offset 5m)) / 72
+      and
+      sum by (instance, homelab_nodes_project, homelab_nodes_service) (count_over_time({job="loki.source.journal.docker"} [5m])) > 100
+    for: 15m
+    labels:
+      severity: warning
+    annotations:
+      description: "Container log volume has spiked well above its recent baseline, which may indicate crash-looping or excessive error logging."
+      summary: "{{ $labels.homelab_nodes_project }}/{{ $labels.homelab_nodes_service }}: {{ $value | printf \"%.0f\" }} lines/5m"
