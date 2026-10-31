@@ -6,7 +6,7 @@
 
 ```bash
 apt update
-apt install curl git git-lfs sudo fzf jq
+apt install curl fzf git git-lfs jq just sudo
 adduser --disabled-password --gecos "" homelab
 usermod -aG sudo homelab
 echo "%sudo ALL=(ALL:ALL) NOPASSWD: ALL" > /etc/sudoers.d/99-homelab
