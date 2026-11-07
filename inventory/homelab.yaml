@@ -45,7 +45,7 @@ config:
         default_homepage_group: Monitor
         sites:
             - id: alertmanager
-              domains: [alertmanager.home.example.com]
+              domains: [home.example.com]
               proxy:
                   service:
                       servers:
@@ -56,7 +56,7 @@ config:
                   icon: alertmanager
                   title: Alertmanager
             - id: prometheus
-              domains: [prometheus.home.example.com]
+              domains: [home.example.com]
               proxy:
                   service:
                       servers:
@@ -67,7 +67,7 @@ config:
                   icon: prometheus
                   title: Prometheus
             - id: router
-              domains: [router.home.example.com]
+              domains: [home.example.com]
               proxy:
                   service:
                       scheme: http+nohttp2
