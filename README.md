@@ -16,7 +16,7 @@ systemctl restart sshd
 
 ## User Setup
 
-> Clone Repo
+> Clone Repo into `~/homelab-starter`.
 
 ```bash
 # install uv
